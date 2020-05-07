@@ -19,7 +19,7 @@ const NotesService = {
         .first()
     },
     deleteNote(knex, id) {
-        return knex(noteful_notes)
+        return knex('noteful_notes')
         .where({ id })
         .delete()
     },
@@ -29,3 +29,5 @@ const NotesService = {
         .update(newNoteFields)
     },
 }
+
+module.exports = NotesService;
