@@ -12,3 +12,4 @@ Sketch an Entity Relationship Diagram of the database. https://app.diagrams.net/
 ### Write an Express server for the Noteful API with the endpoints /notes and /folders.
 
 ### Refactor the client application to use this API. Start by changing the URL used to request data and see if that works. If not, make necessary modifications to the client application.
+https://github.com/ChandaHubbard/Noteful-React-Client
