@@ -7,6 +7,8 @@ const { NODE_ENV } = require("./config");
 const winston = require('winston');
 
 //import routers
+const foldersRouter = require('./folders/folders-router')
+const notesRouter = require('./notes/notes-router')
 
 const app = express();
 
@@ -17,12 +19,17 @@ app.use(helmet());
 app.use(cors());
 
 //link to routers
+app.use('/api/folders', foldersRouter);
+app.use('/api/notes', notesRouter);
 
 app.get("/", (req, res) => {
-    res.send("A GET Request");
+    res.send("Hello world, from noteful!");
   });
 
   //link to xss
+  app.get('/xss', (req, res) => {
+      //revisit this later
+  })
 
 
 
@@ -33,6 +40,12 @@ const logger = winston.createLogger({
         new winston.transports.File({ filename: 'info.log' })
     ]
 });
+
+if (NODE_ENV !== 'production') {
+    logger.add(new winston.transports.Console({
+        format: winston.format.simple()
+    }));
+}
 
 app.use(function errorHandler(error, req, res, next) {
     let response
@@ -47,71 +60,6 @@ app.use(function errorHandler(error, req, res, next) {
   
   module.exports = app
 
-if (NODE_ENV !== 'production') {
-    logger.add(new winston.transports.Console({
-        format: winston.format.simple()
-    }));
-}
 
-
-
-
-// app.get("/notes", (req, res) => {
-//   const responseText = `Here are some details of your request:
-//     Base URL: ${req.baseUrl}
-//     Host: ${req.hostname}
-//     Path: ${req.path}
-//     `;
-//   res.status(200).send(responseText).json(cards);
-
-//   const { label, content } = req.query;
-//   if (!label) {
-//       logger.error(`Label is required`);
-//     return res
-//     .status(400)
-//     .send("Please provide a label");
-//   }
-//   if (!content) {
-//     logger.error(`Content is required`);
-//     return res.status(400).send("Please provide some content");
-//   }
-// });
-
-// app.post("/notes", (req, res) => {
-//   const { label, content = [] } = req.body;
-// });
-
-// app.get("/folders", (req, res) => {
-//   const responseText = `Here are some details of your request:
-//     Base URL: ${req.baseUrl}
-//     Host: ${req.hostname}
-//     Path: ${req.path}
-//     `;
-//   res.status(200).send(responseText).json(folders);
-
-//   const { folder } = req.query;
-//   if (!folder) {
-//     return res.status(400).send("Please provide a folder name");
-//   }
-// });
-
-// app.post("/folders", (req, res) => {
-//   const { folder = [] } = req.body;
-// });
-
-// //routes
-// app.get("/notes/:notesId", (req, res) => {});
-
-// app.get("/folders/:foldersId", (req, res) => {});
-
-// app.delete("/notes/:notesId", (req, res) => {
-//   const { label, content } = req.params;
-//   res.status(204).end();
-// });
-
-// app.delete("/folders/:foldersId", (req, res) => {
-//   const { folder } = req.params;
-//   res.status(204).end();
-// });
 
 module.exports = app;
