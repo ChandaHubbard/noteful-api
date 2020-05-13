@@ -25,11 +25,6 @@ app.get("/", (req, res) => {
     res.send("Hello world, from noteful!");
   });
 
-  //link to xss
-  app.get('/xss', (req, res) => {
-      //revisit this later
-  })
-
 
 app.use(function errorHandler(error, req, res, next) {
     let response
