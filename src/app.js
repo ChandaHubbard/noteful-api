@@ -11,20 +11,29 @@ const notesRouter = require('./notes/notes-router')
 
 const app = express();
 
-const morganOption = NODE_ENV === "production" ? "tiny" : "common";
+const morganOption = NODE_ENV === "production" 
+? "tiny" 
+: "common";
 
 app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
 
 //link to routers
-app.use('/api/folders', foldersRouter);
-app.use('/api/notes', notesRouter);
+app.use('/folders', foldersRouter);
+app.use('/notes', notesRouter);
 
-app.get("/", (req, res) => {
-    res.send("Hello world, from noteful!");
-  });
+// app.get('/api/folders', foldersRouter)
+// app.get('/api/folders/:folder_id', foldersRouter)
+// app.post('api/folders', foldersRouter)
 
+// app.get('/api/notes', notesRouter)
+// app.get('/api/notes/:note_id', notesRouter)
+// app.post('/api/notes', notesRouter)
+
+app.get('/', (req, res) => {
+  res.send("Hello, world!")
+})
 
 app.use(function errorHandler(error, req, res, next) {
     let response
@@ -36,9 +45,5 @@ app.use(function errorHandler(error, req, res, next) {
     }
     res.status(500).json(response)
   })
-  
-  module.exports = app
-
-
 
 module.exports = app;

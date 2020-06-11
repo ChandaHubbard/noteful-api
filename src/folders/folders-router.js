@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require('express');
 const xss = require('xss')
 const FoldersService = require('./folders-service')
@@ -6,13 +5,13 @@ const FoldersService = require('./folders-service')
 const foldersRouter = express.Router();
 const jsonParser = express.json;
 
-const serializeFolder = (folder) => ({
-    id: folder.id,
-    folder: xss(folder.folder),
+const serializeFolder = (folders) => ({
+    id: folders.id,
+    folder: xss(folders.folder),
 });
 
 foldersRouter
-.route('/')
+.route('/folders')
 .get((req, res, next) => {
     const knexInstance = req.app.get('db');
     FoldersService.getAllFolders(knexInstance)
@@ -32,10 +31,10 @@ foldersRouter
     });
 
     FoldersService.insertFolder(req.app.get("db"), newFolder)
-      .then((folder) => {
+      .then((folders) => {
         res
           .status(201)
-          .location(path.posix.join(req.originalUrl, `/${folder.id}`))
+          .location(`folders/${folder.id}`)
           .json(serializeFolder(folder));
       })
       .catch(next);
@@ -45,19 +44,19 @@ foldersRouter
   .route("/:folder_id")
   .all((req, res, next) => {
     FoldersService.getById(req.app.get("db"), req.params.folder_id)
-      .then((folder) => {
-        if (!folder) {
+      .then((folders) => {
+        if (!folders) {
           return res.status(404).json({
             error: { message: `Folder doesn't exist` },
           });
         }
-        res.folder = folder;
+        res.folders = folders;
         next();
       })
       .catch(next);
   })
   .get((req, res, next) => {
-    res.json(serializeFolder(res.folder));
+    res.json(serializeFolder(res.folders));
   })
   .delete((req, res, next) => {
     FoldersService.deleteFolder(req.app.get("db"), req.params.folder_id)
@@ -67,8 +66,8 @@ foldersRouter
       .catch(next);
   })
   .patch(jsonParser, (req, res, next) => {
-    const { title, content, style } = req.body;
-    const folderToUpdate = { title, content, style };
+    const { folder } = req.body;
+    const folderToUpdate = { folder };
 
     const numberOfValues = Object.values(folderToUpdate).filter(Boolean)
       .length;
