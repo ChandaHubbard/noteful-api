@@ -11,13 +11,13 @@ const FoldersService = {
             return rows[0]
         })
     },
-    getbyId(knex, id) {
-        return knex
-        .from('noteful_folders')
-        .select('*')
-        .where('folder_id', id)
-        .first()
-    },
+        getbyId(knex, id) {
+            return knex
+            .from('noteful_notes')
+            .select('*')
+            .where('id', id)
+            .first()
+        },
     deleteFolder(knex, id) {
         return knex('noteful_folders')
         .where('folder_id', id)

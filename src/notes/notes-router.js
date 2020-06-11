@@ -48,9 +48,9 @@ notesRouter
   });
 
 notesRouter
-  .route('/:notes_id')
+  .route('/notes/:notes_id')
   .all((req, res, next) => {
-    NotesService.getById(
+    NotesService.getbyId(
       req.app.get("db"), 
       req.params.notes_id)
       .then(notes => {
