@@ -1,3 +1,4 @@
+// const path = require('require')
 const express = require('express');
 const xss = require('xss')
 const FoldersService = require('./folders-service')
@@ -7,7 +8,7 @@ const jsonParser = express.json;
 
 const serializeFolder = (folders) => ({
     id: folders.id,
-    folder: xss(folders.folder),
+    folder: xss(folders.folders),
 });
 
 foldersRouter
@@ -61,15 +62,16 @@ foldersRouter
     res.json(serializeFolder(res.folders));
   })
   .delete((req, res, next) => {
-    FoldersService.deleteFolder(req.app.get("db"), req.params.folder_id)
-      .then((numRowsAffected) => {
+    FoldersService.deleteFolder(
+      req.app.get("db"), 
+      req.params.folder_id)
+      .then(() => {
         res.status(204).end();
       })
       .catch(next);
   })
-  .patch(jsonParser, (req, res, next) => {
-    const { folder } = req.body;
-    const folderToUpdate = { folder };
+  .patch((req, res, next) => {
+    const folderToUpdate = req.body;
 
     const numberOfValues = Object.values(folderToUpdate).filter(Boolean)
       .length;

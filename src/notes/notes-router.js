@@ -1,4 +1,4 @@
-const path = require('path');
+// const path = require('path');
 const express = require("express");
 const xss = require("xss");
 const NotesService = require("./notes-service");
@@ -24,7 +24,7 @@ notesRouter
       })
       .catch(next);
   })
-  .post(jsonParser, (req, res, next) => {
+  .post((req, res, next) => {
     const newNote = req.body;
 
     for (const [key, value] of Object.entries(newNote)) {
@@ -40,7 +40,7 @@ notesRouter
       .then((notes) => {
         res
           .status(201)
-          .location(path.posix.join(req.originalUrl, `/${notes.id}`))
+          .location(`/notes/${notes.id}`)
           .json(serializeNotes(notes));
       })
       .catch(next);
@@ -73,15 +73,13 @@ notesRouter
       req.app.get("db"), 
       req.params.notes_id
       )
-      .then(numRowsAffected => {
+      .then(() => {
         res.status(204).end();
       })
       .catch(next);
   })
   .patch((req, res, next) => {
-    const knexInstance = req.app.get('db')
     const noteToUpdate = req.body;
-    const notes_id = req.params.id;
 
     const numberOfValues = Object.values(noteToUpdate).filter(Boolean).length;
     if (numberOfValues === 0) {
@@ -92,8 +90,8 @@ notesRouter
       });
     }
     NotesService.updateNote(
-      knexInstance,
-      notes_id,
+      req.app.get('db'),
+      req.params.id,
       noteToUpdate
     )
       .then(() => {
