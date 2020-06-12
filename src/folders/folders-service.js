@@ -2,7 +2,7 @@ const FoldersService = {
     getAllFolders(knex) {
         return knex.select('*').from('noteful_folders')
     },
-    insertNote(knex, newFolder) {
+    insertFolder(knex, newFolder) {
         return knex
         .insert(newFolder)
         .into('noteful_folders')
@@ -13,7 +13,7 @@ const FoldersService = {
     },
         getbyId(knex, id) {
             return knex
-            .from('noteful_notes')
+            .from('noteful_folders')
             .select('*')
             .where('id', id)
             .first()

@@ -20,9 +20,8 @@ foldersRouter
     })
     .catch(next);
 })
-.post(jsonParser, (req, res, next) => {
-    const { folder } = req.body;
-    const newFolder = { folder };
+.post((req, res, next) => {
+    const newFolder = req.body;
 
     for (const [key, value] of Object.entries(newFolder))
     if (value == null)
@@ -30,8 +29,9 @@ foldersRouter
         error: { message: `Missing '${key}' in request body` },
     });
 
-    FoldersService.insertFolder(req.app.get("db"), newFolder)
-      .then((folders) => {
+    FoldersService.insertFolder(
+      req.app.get("db"), newFolder)
+      .then((folder) => {
         res
           .status(201)
           .location(`folders/${folder.id}`)

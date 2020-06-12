@@ -10,7 +10,7 @@ const serializeNotes = (notes) => ({
   id: notes.id,
   note_label: xss(notes.note_label),
   content: xss(notes.content),
-  modified: notes.modified,
+  // modified: notes.modified,
   folder_id: notes.folder_id,
 });
 
@@ -25,8 +25,7 @@ notesRouter
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const { note_label, content, folder_id } = req.body;
-    const newNote = { note_label, content, folder_id };
+    const newNote = req.body;
 
     for (const [key, value] of Object.entries(newNote)) {
       if (value == null)
@@ -48,11 +47,11 @@ notesRouter
   });
 
 notesRouter
-  .route('/notes/:notes_id')
+  .route('/notes/:id')
   .all((req, res, next) => {
     NotesService.getbyId(
       req.app.get("db"), 
-      req.params.notes_id)
+      req.params.id)
       .then(notes => {
         if (!notes) {
           return res
@@ -79,9 +78,10 @@ notesRouter
       })
       .catch(next);
   })
-  .patch(jsonParser, (req, res, next) => {
-    const { note_label, content, folder_id, modified } = req.body;
-    const noteToUpdate = { note_label, content, folder_id, modified };
+  .patch((req, res, next) => {
+    const knexInstance = req.app.get('db')
+    const noteToUpdate = req.body;
+    const notes_id = req.params.id;
 
     const numberOfValues = Object.values(noteToUpdate).filter(Boolean).length;
     if (numberOfValues === 0) {
@@ -92,11 +92,11 @@ notesRouter
       });
     }
     NotesService.updateNote(
-      req.app.get('db'),
-      req.params.notes_id,
+      knexInstance,
+      notes_id,
       noteToUpdate
     )
-      .then(numRowsAffected => {
+      .then(() => {
         res.status(204).end();
       })
       .catch(next);
