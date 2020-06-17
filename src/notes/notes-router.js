@@ -71,10 +71,12 @@ notesRouter
   .delete((req, res, next) => {
     NotesService.deleteNote(
       req.app.get("db"), 
-      req.params.notes_id
+      req.params.id
       )
       .then(() => {
-        res.status(204).end();
+        res.status(204).json({
+          message: `${req.params.id} note has been deleted`
+        });
       })
       .catch(next);
   })
@@ -95,7 +97,9 @@ notesRouter
       noteToUpdate
     )
       .then(() => {
-        res.status(204).end();
+        res.status(204).json({
+          message: `${req.params.id} has been updated`
+        });
       })
       .catch(next);
   });
