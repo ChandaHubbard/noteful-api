@@ -45,17 +45,8 @@ app.use(
   })
 );
 
-
-// app.get('/api/folders', foldersRouter)
-// app.get('/api/folders/:folder_id', foldersRouter)
-// app.post('api/folders', foldersRouter)
-
-// app.get('/api/notes', notesRouter)
-// app.get('/api/notes/:note_id', notesRouter)
-// app.post('/api/notes', notesRouter)
-
 app.get('/', (req, res) => {
-  res.send("Hello, world!")
+  res.send("Hello, world from noteful deploy!")
 })
 
 app.use(function errorHandler(error, req, res, next) {
@@ -68,9 +59,5 @@ app.use(function errorHandler(error, req, res, next) {
     }
     res.status(500).json(response)
   })
-
-  // app.listen(PORT, () => {
-  //   console.log(`Listening at http://localhost:${PORT}`);
-  // });
 
 module.exports = app;
