@@ -22,7 +22,7 @@ notesRouter
       .then((notes) => {
         res.json(notes.map(serializeNotes));
       })
-      .catch(next);
+      // .catch(next);
   })
   .post((req, res, next) => {
     const newNote = req.body;
@@ -43,7 +43,7 @@ notesRouter
           .location(`/notes/${notes.id}`)
           .json(serializeNotes(notes));
       })
-      .catch(next);
+      // .catch(next);
   });
 
 notesRouter
@@ -63,7 +63,7 @@ notesRouter
         res.notes = notes;
         next();
       })
-      .catch(next);
+      // .catch(next);
   })
   .get((req, res, next) => {
     res.json(serializeNotes(res.notes));
@@ -78,7 +78,7 @@ notesRouter
           message: `${req.params.id} note has been deleted`
         });
       })
-      .catch(next);
+      // .catch(next);
   })
   .patch((req, res, next) => {
     const noteToUpdate = req.body;
@@ -101,7 +101,7 @@ notesRouter
           message: `${req.params.id} has been updated`
         });
       })
-      .catch(next);
+      // .catch(next);
   });
 
 module.exports = notesRouter;
