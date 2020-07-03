@@ -31,15 +31,14 @@ const morganOption = NODE_ENV === "production"
 : "common";
 const knexTest = db.select().table("expense_type");
 
-//link to routers
-app.use(foldersRouter);
-app.use(notesRouter);
-
-
 app.use(morgan(morganOption));
 app.use(helmet());
 app.use(express.json());
 app.use(cors());
+
+//link to routers
+app.use(foldersRouter);
+app.use(notesRouter);
 
 app.get('/', (req, res) => {
   res.send("Hello, world from noteful deploy!")
