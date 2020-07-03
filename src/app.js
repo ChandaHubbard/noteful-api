@@ -4,7 +4,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
-const { NODE_ENV, CLIENT_ORIGIN, PORT, DB_URL } = require("./config");
+const { NODE_ENV, PORT, DB_URL } = require("./config");
 const bodyParser = require('body-parser')
 
 const app = express();
@@ -39,11 +39,7 @@ app.use(notesRouter);
 app.use(morgan(morganOption));
 app.use(helmet());
 app.use(express.json());
-app.use(
-  cors({
-    origin: CLIENT_ORIGIN,
-  })
-);
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send("Hello, world from noteful deploy!")

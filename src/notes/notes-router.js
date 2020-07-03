@@ -24,7 +24,7 @@ notesRouter
       })
       .catch((error) => {
         console.log(error)
-      })
+      }, next)
   })
   .post((req, res, next) => {
     const newNote = req.body;
